@@ -1,0 +1,379 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Face Mask Detection</title>
+  <meta name="description" content="Face mask detection using deep learning">
+  <meta name="author" content="ariefrahmansyah">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- <link rel="stylesheet" href="assets/css/normalize.css">
+  <link rel="stylesheet" href="assets/css/skeleton.css"> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <style>
+    .container {
+      max-width: 640px;
+    }
+
+    .webcam-view {
+      position: relative;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    
+    
+/*
+*
+* ==========================================
+* CUSTOM UTIL CLASSES
+* ==========================================
+*
+*/
+.social-link {
+    color: #fff;
+    background: #ff3f3f;
+    display: block;
+    transition: all 0.3s;
+}
+
+.social-link:hover, .social-link:focus {
+    color: white;
+    text-decoration: none;
+}
+
+.social-link .icon {
+    width: 4rem;
+    text-align: center;
+    margin-right: 1.5rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.social-facebook {
+    background: #3b5998;
+}
+
+.social-facebook:hover, .social-facebook:focus {
+    background: #2d4373;
+}
+
+.social-twitter {
+    background: #00aced;
+}
+
+.social-twitter:hover, .social-twitter:focus {
+    background: #0087ba;
+}
+
+.social-google-plus {
+    background: #dd4b39;
+}
+
+.social-google-plus:hover, .social-google-plus:focus {
+    background: #c23321;
+}
+
+.social-behance {
+    background: #00AFF0;
+}
+
+.social-behance:hover, .social-behance:focus {
+    background: #008abd;
+}
+
+.social-soundcloud {
+    background: #ff8800;
+}
+
+.social-soundcloud:hover, .social-soundcloud:focus {
+    background: #cc6d00;
+}
+
+.social-github {
+    background: #666666;
+}
+
+.social-github:hover, .social-github:focus {
+    background: #4d4d4d;
+}
+
+.social-linkedin {
+    background: #0077B5;
+}
+
+.social-linkedin:hover, .social-linkedin:focus {
+    background: #005582;
+}
+
+.social-tumblr {
+    background: #34465d;
+}
+
+.social-tumblr:hover, .social-tumblr:focus {
+    background: #222d3c;
+}
+
+.social-pinterest {
+    background: #bd081c;
+}
+
+.social-pinterest:hover, .social-pinterest:focus {
+    background: #8c0615;
+}
+
+.social-vimeo {
+    background: #1ab7ea;
+}
+
+.social-vimeo:hover, .social-vimeo:focus {
+    background: #1295bf;
+}
+
+.social-vk {
+    background: #4c75a3;
+}
+
+.social-vk:hover, .social-vk:focus {
+    background: #3c5c80;
+}
+
+.social-dribbble {
+    background: #ea4c89;
+}
+
+.social-dribbble:hover, .social-dribbble:focus {
+    background: #e51e6b;
+}
+
+.social-youtube {
+    background: #cd201f;
+}
+
+.social-youtube:hover, .social-youtube:focus {
+    background: #a11918;
+}
+
+.social-medium {
+    background: #02b875;
+}
+
+.social-medium:hover, .social-medium:focus {
+    background: #018655;
+}
+
+.social-instagram {
+    background: #e4405f;
+}
+
+.social-instagram:hover, .social-instagram:focus {
+    background: #d31e40;
+}
+
+.social-skype {
+    background: #00AFF0;
+}
+
+.social-skype:hover, .social-skype:focus {
+    background: #008abd;
+}
+
+.social-vine {
+    background: #00b489;
+}
+
+.social-vine:hover, .social-vine:focus {
+    background: #008162;
+}
+
+.social-flickr {
+    background: #ff0084;
+}
+
+.social-flickr:hover, .social-flickr:focus {
+    background: #cc006a;
+}
+
+.social-flickr {
+    background: #f94877;
+}
+
+.social-flickr:hover, .social-flickr:focus {
+    background: #f71752;
+}
+
+.social-instagram {
+    background: #e4405f;
+}
+
+.social-instagram:hover, .social-instagram:focus {
+    background: #d31e40;
+}
+
+.social-link-gradient:hover, .social-link-gradient:focus {
+    opacity: 0.9;
+}
+
+.social-link-gradient.social-facebook {
+    background: linear-gradient(to right, #3b5998, #718dc8);
+}
+
+.social-link-gradient.social-twitter {
+    background: linear-gradient(to right, #00aced, #54d0ff);
+}
+
+.social-link-gradient.social-google-plus {
+    background: linear-gradient(to right, #dd4b39, #ec9a90);
+}
+
+.social-link-gradient.social-behance {
+    background: linear-gradient(to right, #00AFF0, #57d2ff);
+}
+
+.social-link-gradient.social-soundcloud {
+    background: linear-gradient(to right, #ff8800, #ffb866);
+}
+
+.social-link-gradient.social-github {
+    background: linear-gradient(to right, #666666, #999999);
+}
+
+.social-link-gradient.social-linkedin {
+    background: linear-gradient(to right, #0077B5, #1cb1ff);
+}
+
+.social-link-gradient.social-tumblr {
+    background: linear-gradient(to right, #34465d, #59779e);
+}
+
+.social-link-gradient.social-pinterest {
+    background: linear-gradient(to right, #bd081c, #f6354a);
+}
+
+.social-link-gradient.social-vimeo {
+    background: linear-gradient(to right, #1ab7ea, #77d4f3);
+}
+
+.social-link-gradient.social-vk {
+    background: linear-gradient(to right, #4c75a3, #8ca9c9);
+}
+
+.social-link-gradient.social-dribbble {
+    background: linear-gradient(to right, #ea4c89, #f5a7c5);
+}
+
+.social-link-gradient.social-youtube {
+    background: linear-gradient(to right, #cd201f, #e86a6a);
+}
+
+.social-link-gradient.social-medium {
+    background: linear-gradient(to right, #02b875, #23fdad);
+}
+
+.social-link-gradient.social-instagram {
+    background: linear-gradient(to right, #e4405f, #f199aa);
+}
+
+.social-link-gradient.social-skype {
+    background: linear-gradient(to right, #00AFF0, #57d2ff);
+}
+
+.social-link-gradient.social-vine {
+    background: linear-gradient(to right, #00b489, #1bffc9);
+}
+
+.social-link-gradient.social-flickr {
+    background: linear-gradient(to right, #ff0084, #ff66b5);
+}
+
+.social-link-gradient.social-flickr {
+    background: linear-gradient(to right, #f94877, #fcabc0);
+}
+
+.social-link-gradient.social-instagram {
+    background: linear-gradient(to right, #e4405f, #f199aa);
+}
+
+/*
+*
+* ==========================================
+* FOR DEMO PURPOSES
+* ==========================================
+*
+*/
+body {
+    min-height: 100vh;
+    background-color: #e8cbc0;
+    background-image: linear-gradient(147deg, #e8cbc0 0%, #636fa4 100%);
+}
+      </style>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171170081-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-171170081-1');
+  </script>
+</head>
+<body>
+
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">FaceMe</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a href="https://github.com/bnati5/FaceMe" class="social-link rounded py-2 px-4 my-2 social-github mr-sm-2"><i class="fa fa-github fa-fw"></i></a>
+      <a href="https://www.linkedin.com/in/nathanael-alemayehu-a77265191/" class="social-link rounded py-2 px-4 my-2 social-linkedin my-2 my-sm-2"><i class="fa fa-linkedin fa-fw"></i></a>
+      
+    </div>
+  </div>
+</nav>
+
+
+  <div class="container">
+    <div class="row" style="margin-top: 3%">
+      <div class="column">
+        <h4>Face Mask Detection</h4>
+      </div>
+      
+    </div>
+
+    <div class="row">
+      <div id="live-view" class="column webcam-view">
+        <video id="video" width="640" height="480" playsinline style="
+          -webkit-transform: scaleX(-1);
+          transform: scaleX(-1);
+          width: auto;
+          height: auto;">
+        </video>
+        <canvas id="output"></canvas>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="column">
+        <p id="loading-model">Loading magics...</p>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface"></script>
+  <script src="model.js"></script>
+</body>
+</html>
